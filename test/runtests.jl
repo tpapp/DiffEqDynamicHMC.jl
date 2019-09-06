@@ -8,6 +8,8 @@ using  Test, Distributions, LinearAlgebra, Random
 @info "starting tests"
 Random.seed!(1)
 
+reporter = LogProgressReport(nothing, 100, 60.0) # frequent reporting prevents CI timeout
+
 @testset "Lotka-Volterra 1 parameter" begin
 
     # define model
@@ -28,8 +30,10 @@ Random.seed!(1)
     data = convert(Array, randomized)
 
     # inference
+    mcmc_kwargs = (initialization = (q = zeros(1 + 2),), reporter = reporter)
     bayesian_result = dynamichmc_inference(prob1, t, data, (Normal(1.5, 1), ),
-                                           as(Vector, asℝ₊, 1))
+                                           as(Vector, asℝ₊, 1); mcmc_kwargs = mcmc_kwargs)
+
     # check
     @test mean(p.parameters[1] for p in bayesian_result.posterior) ≈ p[1] atol = 0.1
 end
@@ -57,7 +61,9 @@ end
               c = Truncated(Normal(3.0,0.01), 0, 4),
               d = Truncated(Normal(1.0, 0.01), 0, 2))
 
-    bayesian_result = dynamichmc_inference(prob1, t, data, priors, as(Vector, asℝ₊, 4))
+    mcmc_kwargs = (initialization = (q = zeros(4 + 2),), reporter = reporter)
+    bayesian_result = dynamichmc_inference(prob1, t, data, priors, as(Vector, asℝ₊, 4);
+                                           mcmc_kwargs = mcmc_kwargs)
 
     # check
     @test norm(mean([p.parameters for p in bayesian_result.posterior]) .- p, Inf) ≤ 0.1
