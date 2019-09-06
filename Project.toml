@@ -17,7 +17,7 @@ RecursiveArrayTools = "731186ca-8d62-57ce-b412-fbd966d074cd"
 TransformVariables = "84d833dd-6860-57f9-a1a7-6da5db126cff"
 
 [compat]
-julia = "^1"
+julia = "^1.1"
 DynamicHMC = "^2"
 
 [extras]
