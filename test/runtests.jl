@@ -1,6 +1,11 @@
-using DiffEqDynamicHMC, Test, Distributions, OrdinaryDiffEq, ParameterizedFunctions,
-    RecursiveArrayTools, TransformVariables, DynamicHMC, LinearAlgebra, Random
+@info "loading packages - DiffEq ecosystem"
+using OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
+@info "loading packages - DynamicHMC ecosystem"
+using DiffEqDynamicHMC, TransformVariables, DynamicHMC
+@info "loading packages - rest"
+using  Test, Distributions, LinearAlgebra, Random
 
+@info "starting tests"
 Random.seed!(1)
 
 @testset "Lotka-Volterra 1 parameter" begin
