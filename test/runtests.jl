@@ -1,5 +1,7 @@
 using DiffEqDynamicHMC, Test, Distributions, OrdinaryDiffEq, ParameterizedFunctions,
-    RecursiveArrayTools, TransformVariables, DynamicHMC, LinearAlgebra
+    RecursiveArrayTools, TransformVariables, DynamicHMC, LinearAlgebra, Random
+
+Random.seed!(1)
 
 @testset "Lotka-Volterra 1 parameter" begin
 
@@ -23,7 +25,6 @@ using DiffEqDynamicHMC, Test, Distributions, OrdinaryDiffEq, ParameterizedFuncti
     # inference
     bayesian_result = dynamichmc_inference(prob1, t, data, (Normal(1.5, 1), ),
                                            as(Vector, asℝ₊, 1))
-
     # check
     @test mean(p.parameters[1] for p in bayesian_result.posterior) ≈ p[1] atol = 0.1
 end
